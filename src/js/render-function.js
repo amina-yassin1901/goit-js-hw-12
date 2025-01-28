@@ -17,8 +17,13 @@ export const createGalleryCardTemplate = (imgInfo) => {
 };
 
 export const renderGallery = (images) => {
+    if (!images || images.length === 0) {
+        console.error('No images to render');
+        return;
+    }
+
     const galleryEl = document.querySelector('.js-gallery');
-    const galleryTemplate = images.map((imgInfo) => createGalleryCardTemplate(imgInfo)).join('');
-    galleryEl.innerHTML = galleryTemplate;
-}
+    const galleryTemplate = images.map(imgInfo => createGalleryCardTemplate(imgInfo)).join('');
+    galleryEl.insertAdjacentHTML('beforeend', galleryTemplate);
+};
 
