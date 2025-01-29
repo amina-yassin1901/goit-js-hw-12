@@ -76,28 +76,31 @@ button:hover {
 }
 
 .js-gallery {
-  margin-left: 100px;
-  margin-right: 100px;
+  margin-left: auto;
+  margin-right: auto;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   padding: 20px;
+  max-width: 1140px;
 }
 
 .js-gallery img {
-  height: auto;
-  border-radius: 8px;
+  width: 360px;
+  height: 200px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 
 .gallery-item {
-  width: calc((100% - 48px) / 3);
+  width: calc((100% - 32px) / 3);
   text-decoration: none;
   color: black;
+  border: solid 2px black;
+  max-width: 360px;
 }
 
 .gallery-image {
@@ -115,6 +118,7 @@ button:hover {
   background-color: rgba(0, 0, 0, 0.7);
   color: white;
   text-align: left;
+  width: 340px;
 }
 
 .info-item {
