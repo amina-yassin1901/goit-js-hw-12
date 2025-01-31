@@ -13,13 +13,15 @@ const loaderEl = document.querySelector('.loader');
 let page = 1;
 let searchedQuery = '';
 let totalHits = 0;
+let lightbox = new SimpleLightbox('.js-gallery a'); 
+
+
 
 const onSearchFormSubmit = async event => {
   try {
     event.preventDefault();
 
     searchedQuery = event.currentTarget.elements.query.value.trim();
-    console.log('Search query:', searchedQuery);
 
     if (searchedQuery === '') {
       iziToast.error({ title: 'Error', message: 'Please enter a search term' });
@@ -31,8 +33,6 @@ const onSearchFormSubmit = async event => {
     galleryEl.innerHTML = ''; 
     loadMoreBtnEl.classList.add('is-hidden');
     loaderEl.classList.remove('is-hidden');
-
-    loadMoreBtnEl.removeEventListener('click', onLoadMoreBtnClick);
 
     const { hits, totalHits: newTotalHits } = await fetchImages(searchedQuery, page);
 
@@ -47,11 +47,9 @@ const onSearchFormSubmit = async event => {
 
     if (totalHits > hits.length) {
       loadMoreBtnEl.classList.remove('is-hidden');
-      loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick);
     }
 
-    const lightbox = new SimpleLightbox('.js-gallery a');
-    lightbox.refresh();
+    lightbox.refresh(); 
   } catch (error) {
     iziToast.error({ title: 'Error', message: 'Something went wrong!' });
     console.error(error);
@@ -60,14 +58,14 @@ const onSearchFormSubmit = async event => {
   }
 };
 
+
 const smoothScroll = () => {
-  const cardHeight = galleryEl.firstElementChild.getBoundingClientRect().height;
+  const cardHeight = galleryEl.firstElementChild?.getBoundingClientRect().height || 0;
   window.scrollBy({
     top: cardHeight * 2,
     behavior: 'smooth',
   });
 };
-
 
 const onLoadMoreBtnClick = async () => {
   try {
@@ -75,19 +73,16 @@ const onLoadMoreBtnClick = async () => {
     loaderEl.classList.remove('is-hidden');
 
     const { hits } = await fetchImages(searchedQuery, page);
-    console.log('Fetched more hits:', hits);
 
     if (hits.length > 0) {
       renderGallery(hits, false); 
     }
 
-    const lightbox = new SimpleLightbox('.js-gallery a');
     lightbox.refresh();
 
     if (page * 15 >= totalHits) {
       loadMoreBtnEl.classList.add('is-hidden');
       iziToast.info({ title: 'End of results', message: "We're sorry, but you've reached the end of search results." });
-      loadMoreBtnEl.removeEventListener('click', onLoadMoreBtnClick);
     }
 
     smoothScroll();
@@ -100,5 +95,5 @@ const onLoadMoreBtnClick = async () => {
 };
 
 
-
 searchFormEl.addEventListener('submit', onSearchFormSubmit);
+loadMoreBtnEl.addEventListener('click', onLoadMoreBtnClick);
